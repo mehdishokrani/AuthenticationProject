@@ -1,0 +1,38 @@
+
+</div>
+<div class="container mt-0">
+    <footer class="py-3 mt-4 mb-0">
+      <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        <li class="nav-item"><a href="/" class="nav-link px-2 text-body-secondary">Home</a></li>
+        <li class="nav-item"><a href="/register" class="nav-link px-2 text-body-secondary">Register</a></li>
+        <li class="nav-item"><a href="/login" class="nav-link px-2 text-body-secondary">Login</a></li>
+      </ul>
+      <p class="text-center text-body-secondary">© 2023 Mehdi with 💜 from Calgary</p>
+    </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get all the nav links
+        const links = document.querySelectorAll(".nav-link");
+        
+        links.forEach(link => {
+            // Remove 'active' class from all links initially
+            link.classList.remove('active');
+            
+            // Compare the href of the link with the current URL's path
+            if (window.location.pathname === link.getAttribute('href')) {
+                link.classList.add('active'); // Add the 'active' class to the matching link
+                link.setAttribute('aria-current', 'page'); // Add aria-current for accessibility
+            } else {
+                link.removeAttribute('aria-current'); // Remove aria-current if it's not the active link
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
+
+
+
