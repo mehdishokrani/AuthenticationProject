@@ -4,7 +4,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
-const md5 = require("md5")
+const bcrypt = require("bcrypt")
+
+const saltRound = 10
 
 const { Schema } = mongoose;
 
@@ -46,9 +48,10 @@ app.get("/login", (req, res) => {
   res.render("login");
 });
 
-app.post("/register", (req, res) => {
+app.post("/register", async (req, res) => {
   email = req.body.username;
-  password = md5(req.body.password);
+  password = await bcrypt.hash(req.body.password,saltRound);
+
   if (email != "" && email && password) {
     const newuser = new User({ email: email, password: password });
     newuser
@@ -65,14 +68,14 @@ app.post("/register", (req, res) => {
 
 app.post("/login", (req, res) => {
   const email = req.body.username;
-  const password = md5(req.body.password);
+  const password = req.body.password;
   User.findOne({ email: email })
     .then((result) => {
       if (!result) {
         console.log("No user found");
         res.redirect("/login");
       } else {
-        if (password === result.password) {
+        if ( bcrypt.compare(password,result.password)) {
           res.render("secrets");
         } else {
           console.log("Wrong password");
