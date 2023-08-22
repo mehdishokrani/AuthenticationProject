@@ -56,7 +56,8 @@ const userSchema = new Schema({
     type: String,
     unique: true, 
     sparse: true, 
-  }
+  },
+  secret: [String]
 });
 
 
@@ -107,7 +108,7 @@ function(accessToken, refreshToken, profile, cb) {
 ));
 
 app.get("/", (req, res) => {
-  res.render("home");
+  res.render("home",{userIsAuthenticated:req.isAuthenticated()});
 });
 
 app.get('/auth/facebook',
@@ -131,21 +132,43 @@ app.get('/auth/google/callback',
   });
 
 app.get("/register", (req, res) => {
-  res.render("register");
+  res.render("register",{userIsAuthenticated:req.isAuthenticated()});
 });
 
 app.get("/login", (req, res) => {
-  res.render("login");
+  res.render("login",{userIsAuthenticated:req.isAuthenticated()});
 });
 
 app.get("/secrets", (req, res) => {
+  User.find({"secret": { $exists: true, $not: { $size: 0 } }})
+  .then((result) => {
+      res.render("secrets", { users: result, userIsAuthenticated:req.isAuthenticated()});
+  })
+  .catch(err => {
+      console.error('Error:', err);
+      res.status(500).send('Server Error');
+  });
+});
+
+app.get("/submit",(req,res)=>{
   if (req.isAuthenticated()) {
-    res.render("secrets");
+    res.render("submit",{userIsAuthenticated:req.isAuthenticated()});
   } 
   else {
     res.redirect("/login");
   }
+})
+
+
+app.post("/submit",(req,res)=>{
+  User.findByIdAndUpdate(req.user.id,{$push: {secret: req.body.secret}}).then((result) => {
+    res.redirect("/secrets")
+}).catch((err) => {
+    console.error("Update Error:", err);
 });
+
+})
+
 
 app.get('/logout', function(req, res, next) {
   req.logout(function(err) {

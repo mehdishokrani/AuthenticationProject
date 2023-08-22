@@ -15,9 +15,16 @@
   <div class="container">
     <header class="d-flex justify-content-center py-3">
       <ul class="nav nav-pills">
-        <li class="nav-item"><a href="/" class="nav-link" aria-current="page">Home</a></li>
-        <li class="nav-item"><a href="/register" class="nav-link">Register</a></li>
-        <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+          <li class="nav-item"><a href="/" class="nav-link px-2 text-body-secondary">Home</a></li>
+          
+          <% if (!userIsAuthenticated) { %>
+              <li class="nav-item"><a href="/register" class="nav-link px-2 text-body-secondary">Register</a></li>
+              <li class="nav-item"><a href="/login" class="nav-link px-2 text-body-secondary">Login</a></li>
+          <% } else{ %>
+            <li class="nav-item"><a href="/logout" class="nav-link px-2 text-body-secondary">Logout</a></li>
+          <% } %>
+      </ul>
       </ul>
     </header>
   </div>
